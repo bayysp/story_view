@@ -169,6 +169,7 @@ class StoryItem {
   /// one passed to the `StoryView`
   factory StoryItem.inlineImage({
     required String url,
+    Widget? widget,
     Text? caption,
     required StoryController controller,
     Key? key,
@@ -194,17 +195,19 @@ class StoryItem {
                   fit: imageFit,
                   requestHeaders: requestHeaders,
                 ),
-                Container(
-                  margin: EdgeInsets.only(bottom: 16),
-                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                  child: Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Container(
-                      child: caption == null ? SizedBox() : caption,
-                      width: double.infinity,
+                widget ??
+                    Container(
+                      margin: EdgeInsets.only(bottom: 16),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                      child: Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Container(
+                          child: caption == null ? SizedBox() : caption,
+                          width: double.infinity,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
               ],
             ),
           ),
