@@ -36,9 +36,13 @@ class StoryItem {
   /// The page content
   final Widget view;
 
+  /// Custom widget that cannot get with controller
+  final Widget customWidget;
+
   StoryItem(
     this.view, {
     required this.duration,
+    this.customWidget = const SizedBox.shrink(),
     this.shown = false,
   });
 
@@ -129,34 +133,32 @@ class StoryItem {
               fit: imageFit,
               requestHeaders: requestHeaders,
             ),
-            widget ??
-                SafeArea(
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      width: double.infinity,
-                      margin: EdgeInsets.only(
-                        bottom: 24,
-                      ),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 8,
-                      ),
-                      color:
-                          caption != null ? Colors.black54 : Colors.transparent,
-                      child: caption != null
-                          ? Text(
-                              caption,
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.white,
-                              ),
-                              textAlign: TextAlign.center,
-                            )
-                          : SizedBox(),
-                    ),
+            SafeArea(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  width: double.infinity,
+                  margin: EdgeInsets.only(
+                    bottom: 24,
                   ),
-                )
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 8,
+                  ),
+                  color: caption != null ? Colors.black54 : Colors.transparent,
+                  child: caption != null
+                      ? Text(
+                          caption,
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
+                        )
+                      : SizedBox(),
+                ),
+              ),
+            )
           ],
         ),
       ),
@@ -457,6 +459,12 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
     return item?.view ?? Container();
   }
 
+  Widget get _customWidget {
+    var item = widget.storyItems.firstWhereOrNull((it) => !it!.shown);
+    item ??= widget.storyItems.last;
+    return item?.customWidget ?? SizedBox.shrink();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -725,6 +733,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
                 }),
                 width: 70),
           ),
+          _customWidget,
         ],
       ),
     );
