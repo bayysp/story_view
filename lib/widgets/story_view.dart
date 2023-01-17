@@ -41,8 +41,8 @@ class StoryItem {
 
   StoryItem(
     this.view, {
+    required this.customWidget,
     required this.duration,
-    this.customWidget = const SizedBox.shrink(),
     this.shown = false,
   });
 
@@ -57,6 +57,7 @@ class StoryItem {
   static StoryItem text({
     required String title,
     required Color backgroundColor,
+    Widget customWidget = const SizedBox.shrink(),
     Key? key,
     TextStyle? textStyle,
     bool shown = false,
@@ -103,6 +104,7 @@ class StoryItem {
         ),
         //color: backgroundColor,
       ),
+      customWidget: customWidget,
       shown: shown,
       duration: duration ?? Duration(seconds: 3),
     );
@@ -113,13 +115,13 @@ class StoryItem {
   factory StoryItem.pageImage({
     required String url,
     required StoryController controller,
-    Widget? widget,
     Key? key,
     BoxFit imageFit = BoxFit.fitWidth,
     String? caption,
     bool shown = false,
     Map<String, dynamic>? requestHeaders,
     Duration? duration,
+    Widget customWidget = const SizedBox.shrink(),
   }) {
     return StoryItem(
       Container(
@@ -162,6 +164,7 @@ class StoryItem {
           ],
         ),
       ),
+      customWidget: customWidget,
       shown: shown,
       duration: duration ?? Duration(seconds: 3),
     );
@@ -171,9 +174,9 @@ class StoryItem {
   /// one passed to the `StoryView`
   factory StoryItem.inlineImage({
     required String url,
-    Widget? widget,
     Text? caption,
     required StoryController controller,
+    Widget customWidget = const SizedBox.shrink(),
     Key? key,
     BoxFit imageFit = BoxFit.cover,
     Map<String, dynamic>? requestHeaders,
@@ -197,19 +200,17 @@ class StoryItem {
                   fit: imageFit,
                   requestHeaders: requestHeaders,
                 ),
-                widget ??
-                    Container(
-                      margin: EdgeInsets.only(bottom: 16),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                      child: Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Container(
-                          child: caption == null ? SizedBox() : caption,
-                          width: double.infinity,
-                        ),
-                      ),
+                Container(
+                  margin: EdgeInsets.only(bottom: 16),
+                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                  child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Container(
+                      child: caption == null ? SizedBox() : caption,
+                      width: double.infinity,
                     ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -219,6 +220,7 @@ class StoryItem {
           bottom: Radius.circular(roundedBottom ? 8 : 0),
         ),
       ),
+      customWidget: customWidget,
       shown: shown,
       duration: duration ?? Duration(seconds: 3),
     );
@@ -229,7 +231,7 @@ class StoryItem {
   factory StoryItem.pageVideo(
     String url, {
     required StoryController controller,
-    Widget? widget,
+    Widget customWidget = const SizedBox.shrink(),
     Key? key,
     Duration? duration,
     BoxFit imageFit = BoxFit.fitWidth,
@@ -248,32 +250,29 @@ class StoryItem {
                 controller: controller,
                 requestHeaders: requestHeaders,
               ),
-              widget ??
-                  SafeArea(
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Container(
-                        width: double.infinity,
-                        margin: EdgeInsets.only(bottom: 24),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                        color: caption != null
-                            ? Colors.black54
-                            : Colors.transparent,
-                        child: caption != null
-                            ? Text(
-                                caption,
-                                style: TextStyle(
-                                    fontSize: 15, color: Colors.white),
-                                textAlign: TextAlign.center,
-                              )
-                            : SizedBox(),
-                      ),
-                    ),
-                  )
+              SafeArea(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    width: double.infinity,
+                    margin: EdgeInsets.only(bottom: 24),
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                    color:
+                        caption != null ? Colors.black54 : Colors.transparent,
+                    child: caption != null
+                        ? Text(
+                            caption,
+                            style: TextStyle(fontSize: 15, color: Colors.white),
+                            textAlign: TextAlign.center,
+                          )
+                        : SizedBox(),
+                  ),
+                ),
+              )
             ],
           ),
         ),
+        customWidget: customWidget,
         shown: shown,
         duration: duration ?? Duration(seconds: 10));
   }
@@ -288,6 +287,7 @@ class StoryItem {
     String? caption,
     bool shown = false,
     Duration? duration,
+    Widget customWidget = const SizedBox.shrink(),
   }) {
     return StoryItem(
         Container(
@@ -333,6 +333,7 @@ class StoryItem {
             ],
           ),
         ),
+        customWidget: customWidget,
         shown: shown,
         duration: duration ?? Duration(seconds: 3));
   }
@@ -348,6 +349,7 @@ class StoryItem {
     bool roundedTop = true,
     bool roundedBottom = false,
     Duration? duration,
+    Widget customWidget = const SizedBox.shrink(),
   }) {
     return StoryItem(
       Container(
@@ -379,6 +381,7 @@ class StoryItem {
           ),
         ),
       ),
+      customWidget: customWidget,
       shown: shown,
       duration: duration ?? Duration(seconds: 3),
     );
