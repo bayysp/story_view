@@ -35,6 +35,7 @@ class StoryItem {
 
   /// The page content
   final Widget view;
+
   StoryItem(
     this.view, {
     required this.duration,
@@ -108,6 +109,7 @@ class StoryItem {
   factory StoryItem.pageImage({
     required String url,
     required StoryController controller,
+    Widget? widget,
     Key? key,
     BoxFit imageFit = BoxFit.fitWidth,
     String? caption,
@@ -127,32 +129,34 @@ class StoryItem {
               fit: imageFit,
               requestHeaders: requestHeaders,
             ),
-            SafeArea(
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  width: double.infinity,
-                  margin: EdgeInsets.only(
-                    bottom: 24,
+            widget ??
+                SafeArea(
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      width: double.infinity,
+                      margin: EdgeInsets.only(
+                        bottom: 24,
+                      ),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 8,
+                      ),
+                      color:
+                          caption != null ? Colors.black54 : Colors.transparent,
+                      child: caption != null
+                          ? Text(
+                              caption,
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                            )
+                          : SizedBox(),
+                    ),
                   ),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 8,
-                  ),
-                  color: caption != null ? Colors.black54 : Colors.transparent,
-                  child: caption != null
-                      ? Text(
-                          caption,
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.white,
-                          ),
-                          textAlign: TextAlign.center,
-                        )
-                      : SizedBox(),
-                ),
-              ),
-            )
+                )
           ],
         ),
       ),
@@ -220,6 +224,7 @@ class StoryItem {
   factory StoryItem.pageVideo(
     String url, {
     required StoryController controller,
+    Widget? widget,
     Key? key,
     Duration? duration,
     BoxFit imageFit = BoxFit.fitWidth,
@@ -238,25 +243,29 @@ class StoryItem {
                 controller: controller,
                 requestHeaders: requestHeaders,
               ),
-              SafeArea(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    width: double.infinity,
-                    margin: EdgeInsets.only(bottom: 24),
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                    color:
-                        caption != null ? Colors.black54 : Colors.transparent,
-                    child: caption != null
-                        ? Text(
-                            caption,
-                            style: TextStyle(fontSize: 15, color: Colors.white),
-                            textAlign: TextAlign.center,
-                          )
-                        : SizedBox(),
-                  ),
-                ),
-              )
+              widget ??
+                  SafeArea(
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        width: double.infinity,
+                        margin: EdgeInsets.only(bottom: 24),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                        color: caption != null
+                            ? Colors.black54
+                            : Colors.transparent,
+                        child: caption != null
+                            ? Text(
+                                caption,
+                                style: TextStyle(
+                                    fontSize: 15, color: Colors.white),
+                                textAlign: TextAlign.center,
+                              )
+                            : SizedBox(),
+                      ),
+                    ),
+                  )
             ],
           ),
         ),
