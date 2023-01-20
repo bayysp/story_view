@@ -474,7 +474,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-
+    if (widget.initialValue != 0) {}
     // All pages after the first unshown page should have their shown value as
     // false
     final firstPage = widget.storyItems.firstWhereOrNull((it) => !it!.shown);
@@ -545,7 +545,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
       widget.onStoryShow!(storyItem);
     }
 
-    _animationController = AnimationController(
+    _animationController = AnimationController.unbounded(
       value: widget.initialValue.toDouble(),
       duration: storyItem.duration,
       vsync: this,
