@@ -425,9 +425,12 @@ class StoryView extends StatefulWidget {
   // Indicator Color
   final Color indicatorColor;
 
+  final int initialValue;
+
   StoryView({
     required this.storyItems,
     required this.controller,
+    this.initialValue = 0,
     this.onComplete,
     this.onStoryShow,
     this.progressPosition = ProgressPosition.top,
@@ -542,8 +545,11 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
       widget.onStoryShow!(storyItem);
     }
 
-    _animationController =
-        AnimationController(duration: storyItem.duration, vsync: this);
+    _animationController = AnimationController(
+      value: widget.initialValue.toDouble(),
+      duration: storyItem.duration,
+      vsync: this,
+    );
 
     _animationController!.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
