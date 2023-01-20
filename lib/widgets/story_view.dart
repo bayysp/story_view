@@ -450,6 +450,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
   AnimationController? _animationController;
   Animation<double>? _currentAnimation;
   Timer? _nextDebouncer;
+  bool isFirstTimePlay = true;
 
   StreamSubscription<PlaybackState>? _playbackSubscription;
 
@@ -562,6 +563,11 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
         }
       }
     });
+
+    if (isFirstTimePlay) {
+      _animationController?.animateTo(widget.initialValue.toDouble());
+      isFirstTimePlay = false;
+    }
 
     _currentAnimation =
         Tween(begin: 0.0, end: 1.0).animate(_animationController!);
