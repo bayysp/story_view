@@ -39,11 +39,15 @@ class StoryItem {
   /// Custom widget that cannot get with controller
   final Widget customWidget;
 
+  /// put custom argument if you need to get something when story showed
+  final Map<String, dynamic> args;
+
   StoryItem(
     this.view, {
     required this.customWidget,
     required this.duration,
     this.shown = false,
+    this.args = const {},
   });
 
   /// Short hand to create text-only page.
@@ -64,6 +68,7 @@ class StoryItem {
     bool roundedTop = false,
     bool roundedBottom = false,
     Duration? duration,
+    Map<String, dynamic> args = const {},
   }) {
     double contrast = ContrastHelper.contrast([
       backgroundColor.red,
@@ -107,6 +112,7 @@ class StoryItem {
       customWidget: customWidget,
       shown: shown,
       duration: duration ?? Duration(seconds: 3),
+      args: args,
     );
   }
 
@@ -122,6 +128,7 @@ class StoryItem {
     Map<String, dynamic>? requestHeaders,
     Duration? duration,
     Widget customWidget = const SizedBox.shrink(),
+    Map<String, dynamic> args = const {},
   }) {
     return StoryItem(
       Container(
@@ -167,6 +174,7 @@ class StoryItem {
       customWidget: customWidget,
       shown: shown,
       duration: duration ?? Duration(seconds: 3),
+      args: args,
     );
   }
 
@@ -184,6 +192,7 @@ class StoryItem {
     bool roundedTop = true,
     bool roundedBottom = false,
     Duration? duration,
+    Map<String, dynamic> args = const {},
   }) {
     return StoryItem(
       ClipRRect(
@@ -223,6 +232,7 @@ class StoryItem {
       customWidget: customWidget,
       shown: shown,
       duration: duration ?? Duration(seconds: 3),
+      args: args,
     );
   }
 
@@ -238,43 +248,45 @@ class StoryItem {
     String? caption,
     bool shown = false,
     Map<String, dynamic>? requestHeaders,
+    Map<String, dynamic> args = const {},
   }) {
     return StoryItem(
-        Container(
-          key: key,
-          color: Colors.black,
-          child: Stack(
-            children: <Widget>[
-              StoryVideo.url(
-                url,
-                controller: controller,
-                requestHeaders: requestHeaders,
-              ),
-              SafeArea(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    width: double.infinity,
-                    margin: EdgeInsets.only(bottom: 24),
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                    color:
-                        caption != null ? Colors.black54 : Colors.transparent,
-                    child: caption != null
-                        ? Text(
-                            caption,
-                            style: TextStyle(fontSize: 15, color: Colors.white),
-                            textAlign: TextAlign.center,
-                          )
-                        : SizedBox(),
-                  ),
+      Container(
+        key: key,
+        color: Colors.black,
+        child: Stack(
+          children: <Widget>[
+            StoryVideo.url(
+              url,
+              controller: controller,
+              requestHeaders: requestHeaders,
+            ),
+            SafeArea(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  width: double.infinity,
+                  margin: EdgeInsets.only(bottom: 24),
+                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                  color: caption != null ? Colors.black54 : Colors.transparent,
+                  child: caption != null
+                      ? Text(
+                          caption,
+                          style: TextStyle(fontSize: 15, color: Colors.white),
+                          textAlign: TextAlign.center,
+                        )
+                      : SizedBox(),
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
-        customWidget: customWidget,
-        shown: shown,
-        duration: duration ?? Duration(seconds: 10));
+      ),
+      customWidget: customWidget,
+      shown: shown,
+      duration: duration ?? Duration(seconds: 10),
+      args: args,
+    );
   }
 
   /// Shorthand for creating a story item from an image provider such as `AssetImage`
@@ -288,54 +300,56 @@ class StoryItem {
     bool shown = false,
     Duration? duration,
     Widget customWidget = const SizedBox.shrink(),
+    Map<String, dynamic> args = const {},
   }) {
     return StoryItem(
-        Container(
-          key: key,
-          color: Colors.black,
-          child: Stack(
-            children: <Widget>[
-              Center(
-                child: Image(
-                  image: image,
-                  height: double.infinity,
+      Container(
+        key: key,
+        color: Colors.black,
+        child: Stack(
+          children: <Widget>[
+            Center(
+              child: Image(
+                image: image,
+                height: double.infinity,
+                width: double.infinity,
+                fit: imageFit,
+              ),
+            ),
+            SafeArea(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
                   width: double.infinity,
-                  fit: imageFit,
+                  margin: EdgeInsets.only(
+                    bottom: 24,
+                  ),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 8,
+                  ),
+                  color: caption != null ? Colors.black54 : Colors.transparent,
+                  child: caption != null
+                      ? Text(
+                          caption,
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
+                        )
+                      : SizedBox(),
                 ),
               ),
-              SafeArea(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    width: double.infinity,
-                    margin: EdgeInsets.only(
-                      bottom: 24,
-                    ),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 8,
-                    ),
-                    color:
-                        caption != null ? Colors.black54 : Colors.transparent,
-                    child: caption != null
-                        ? Text(
-                            caption,
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.white,
-                            ),
-                            textAlign: TextAlign.center,
-                          )
-                        : SizedBox(),
-                  ),
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
-        customWidget: customWidget,
-        shown: shown,
-        duration: duration ?? Duration(seconds: 3));
+      ),
+      customWidget: customWidget,
+      shown: shown,
+      duration: duration ?? Duration(seconds: 3),
+      args: args,
+    );
   }
 
   /// Shorthand for creating an inline story item from an image provider such as `AssetImage`
@@ -350,6 +364,7 @@ class StoryItem {
     bool roundedBottom = false,
     Duration? duration,
     Widget customWidget = const SizedBox.shrink(),
+    Map<String, dynamic> args = const {},
   }) {
     return StoryItem(
       Container(
@@ -384,6 +399,7 @@ class StoryItem {
       customWidget: customWidget,
       shown: shown,
       duration: duration ?? Duration(seconds: 3),
+      args: args,
     );
   }
 }
