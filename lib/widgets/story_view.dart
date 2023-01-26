@@ -443,7 +443,8 @@ class StoryView extends StatefulWidget {
   }
 }
 
-class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
+class StoryViewState extends State<StoryView>
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   AnimationController? _animationController;
   Animation<double>? _currentAnimation;
   Timer? _nextDebouncer;
@@ -471,6 +472,8 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance.addObserver(this);
 
     // All pages after the first unshown page should have their shown value as
     // false
@@ -518,6 +521,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
   void dispose() {
     _clearDebouncer();
 
+    WidgetsBinding.instance.removeObserver(this);
     _animationController?.dispose();
     _playbackSubscription?.cancel();
 
@@ -740,6 +744,19 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
         ],
       ),
     );
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print("$runtimeType AppLifecycleState - $state");
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive) {
+      widget.controller.pause();
+    }
+
+    if (state == AppLifecycleState.resumed) {
+      widget.controller.play();
+    }
   }
 }
 
